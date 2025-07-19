@@ -55,4 +55,17 @@ export class UrlManageService {
             }
         });
     }
+
+    async getOriginalUrl(shortUrl: string){
+        const url = await this.prisma.link.findUnique({
+            where: { shortCode: shortUrl },
+            select: { originalUrl: true }
+        });
+
+        if(!url){
+            throw new NotFoundException('This url not founded in database.');
+        }
+
+        return url.originalUrl;
+    }
 }
