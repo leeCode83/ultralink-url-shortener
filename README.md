@@ -1,99 +1,136 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+# Ultralink URL Shortener
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+Ultralink is a robust URL shortening service built with NestJS, designed to efficiently transform long URLs into concise, manageable links. It features user authentication, allowing users to register, log in, and manage their shortened URLs. The application integrates with Prisma for database management, providing a structured and scalable backend for link and user data.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://coveralls.io/github/nestjs/nest?branch=master" target="_blank"><img src="https://coveralls.io/repos/github/nestjs/nest/badge.svg?branch=master#9" alt="Coverage" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+## Features
 
-## Description
+  * **URL Shortening**: Convert lengthy URLs into short, easy-to-share links.
+  * **User Authentication**: Secure user registration and login functionality using JWT (JSON Web Tokens).
+  * **Personalized URL Management**: Users can view and manage all the short URLs they have created.
+  * **Database Management**: Utilizes Prisma ORM for seamless interaction with a PostgreSQL database, managing `User` and `Link` models.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+## Technologies Used
 
-## Project setup
+  * **Backend**: NestJS (TypeScript)
+  * **Database**: PostgreSQL (managed with Prisma ORM)
+  * **Authentication**: Passport-JWT, bcrypt
 
-```bash
-$ npm install
-```
+## Project Setup
 
-## Compile and run the project
+To get the project up and running on your local machine, follow these steps:
 
-```bash
-# development
-$ npm run start
+### Prerequisites
 
-# watch mode
-$ npm run start:dev
+Ensure you have the following installed:
 
-# production mode
-$ npm run start:prod
-```
+  * Node.js (version 20 or higher recommended)
+  * npm (comes with Node.js)
+  * PostgreSQL database
 
-## Run tests
+### Installation
 
-```bash
-# unit tests
-$ npm run test
+1.  **Clone the repository:**
 
-# e2e tests
-$ npm run test:e2e
+    ```bash
+    git clone <repository-url>
+    cd ultralink-url-shortener
+    ```
 
-# test coverage
-$ npm run test:cov
-```
+2.  **Install dependencies:**
 
-## Deployment
+    ```bash
+    npm install
+    ```
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+3.  **Configure Environment Variables:**
+    Create a `.env` file in the root directory of the project and add the following environment variables:
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+    ```
+    DATABASE_URL="postgresql://<user>:<password>@<host>:<port>/<database>?schema=public"
+    SECRET_KEY="your_jwt_secret_key"
+    SECRET_KEY_EXPIRE="1h" # e.g., 1h, 7d
+    PORT=3000
+    ```
 
-```bash
-$ npm install -g mau
-$ mau deploy
-```
+      * **DATABASE\_URL**: Your PostgreSQL connection string.
+      * **SECRET\_KEY**: A strong, secret key for JWT signing.
+      * **SECRET\_KEY\_EXPIRE**: The expiration time for your JWT tokens.
+      * **PORT**: The port on which the application will run (default is 3000).
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+4.  **Run Database Migrations:**
+    Apply the Prisma migrations to set up your database schema:
 
-## Resources
+    ```bash
+    npx prisma migrate dev --name init
+    ```
 
-Check out a few resources that may come in handy when working with NestJS:
+    This will create the `Link` and `User` tables in your database.
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Running the Project
 
-## Support
+You can run the project in different modes:
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+  * **Development Mode (with watch)**:
 
-## Stay in touch
+    ```bash
+    npm run start:dev
+    ```
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+    This will start the application and automatically recompile on file changes.
 
-## License
+  * **Production Mode**:
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+    ```bash
+    npm run start:prod
+    ```
+
+    This builds the application for production and starts it.
+
+  * **Development (no watch)**:
+
+    ```bash
+    npm run start
+    ```
+
+### API Endpoints
+
+  * **Authentication**
+
+      * `POST /auth/register`: Register a new user.
+      * `POST /auth/login`: Log in an existing user and receive a JWT token.
+
+  * **URL Management**
+
+      * `POST /url-manage`: Create a new short URL (requires JWT authentication).
+      * `GET /url-manage`: Get all short URLs (publicly accessible).
+      * `GET /url-manage/by-user`: Get all short URLs created by the authenticated user (requires JWT authentication).
+
+## Running Tests
+
+The project includes unit and end-to-end (e2e) tests.
+
+  * **Unit Tests**:
+
+    ```bash
+    npm run test
+    ```
+
+  * **End-to-End Tests**:
+
+    ```bash
+    npm run test:e2e
+    ```
+
+  * **Test Coverage**:
+
+    ```bash
+    npm run test:cov
+    ```
+
+## Future Enhancements (QR Code Feature)
+
+We are planning to implement a **QR code generation feature**. This will allow users to instantly generate a QR code for their shortened URLs, making it even easier to share links across various platforms and devices. The QR codes will directly redirect to the original long URL.
+
+## Contributions
+
+Suggestions and collaborations are highly welcome\! If you have any ideas for new features, improvements, or bug fixes, feel free to open an issue or submit a pull request. We look forward to building Ultralink into an even more powerful tool with your help.
