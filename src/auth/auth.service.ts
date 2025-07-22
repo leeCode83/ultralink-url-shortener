@@ -41,8 +41,15 @@ export class AuthService {
                     password: hashedPassword
                 }
             });
-
-            return this.generateToken({ id: newUser.id, name: newUser.name, email: newUser.email });
+            const token = await this.generateToken({ id: newUser.id, name: newUser.name, email: newUser.email });
+            return {
+                access_token: token,
+                user: {
+                    id: newUser.id,
+                    name: newUser.name,
+                    email: newUser.email
+                }
+            };
         } catch (error) {
             throw error;
         }
@@ -64,7 +71,15 @@ export class AuthService {
                 throw new UnauthorizedException("Incorect password, please try again");
             }
 
-            return this.generateToken({ id: existedUser.id, name: existedUser.name, email: existedUser.email });
+            const token = await this.generateToken({ id: existedUser.id, name: existedUser.name, email: existedUser.email });
+            return {
+                access_token: token,
+                user: {
+                    id: existedUser.id,
+                    name: existedUser.name,
+                    email: existedUser.email
+                }
+            };
         } catch (error) {
             throw error;
         }

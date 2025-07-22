@@ -10,7 +10,7 @@ export class UrlManageService {
             where: { shortCode: data.shortUrl }
         });
 
-        if(existedShorturl){
+        if(existedShorturl && data.shortUrl.length > 10){
             throw new BadRequestException('This short url already existed.');
         }
 
@@ -51,6 +51,7 @@ export class UrlManageService {
             select: {
                 shortCode: true,
                 originalUrl: true,
+                click: true,
                 createdAt: true
             }
         });
@@ -65,6 +66,13 @@ export class UrlManageService {
         if(!url){
             throw new NotFoundException('This url not founded in database.');
         }
+
+        await this.prisma.link.update({
+            where: { shortCode: shortUrl },
+            data: {
+                click: { increment: 1 }
+            }
+        })
 
         return url.originalUrl;
     }
