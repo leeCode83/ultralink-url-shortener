@@ -1,6 +1,7 @@
-import { Body, Controller, Get, Param, Post, Redirect, Request, UseGuards } from '@nestjs/common';
+import { Body, Controller, Get, Param, Post, Redirect, Request, UseGuards, UseInterceptors } from '@nestjs/common';
 import { UrlManageService } from './url-manage.service';
 import { AuthGuard } from '@nestjs/passport';
+import { CacheInterceptor } from '@nestjs/cache-manager';
 
 @Controller('url-manage')
 export class UrlManageController {
@@ -24,9 +25,11 @@ export class UrlManageController {
     }
 
     @Get(':shortUrl')
+    @UseInterceptors(CacheInterceptor)
     @Redirect()
     async getOriginalUrl(@Param('shortUrl') shortUrl: string){
         const originalUrl = await this.urlManagerService.getOriginalUrl(shortUrl);
+        
         return { url: originalUrl }
     }
 }
